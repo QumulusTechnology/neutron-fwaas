@@ -179,7 +179,10 @@ class FirewallAgentDriver(driver_api.FirewallDriverDB,
 
             # TODO(annp): remove these lines after we fully support for hybrid
             # port
-            if not port[pb_def.VIF_DETAILS][pb_def.OVS_HYBRID_PLUG]:
+            vif_details = port.get(pb_def.VIF_DETAILS, {})
+            if pb_def.OVS_HYBRID_PLUG not in vif_details:
+                return True
+            elif not vif_details[pb_def.OVS_HYBRID_PLUG]:
                 return True
             LOG.warning("Doesn't support hybrid port at the moment")
         else:
